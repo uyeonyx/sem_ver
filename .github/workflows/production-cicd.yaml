@@ -28,7 +28,7 @@ jobs:
     needs:
       - Semantic-Versioning
       - Test
-    uses: ./github/workflows/release.yaml
+    uses: ./.github/workflows/release.yaml
     with:
       version: ${{ needs.semantic-versioning.outputs.version }}
       from: release

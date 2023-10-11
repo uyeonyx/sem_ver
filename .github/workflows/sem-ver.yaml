@@ -2,9 +2,13 @@ name: Semantic Versioning
 
 on:
   workflow_call:
+    outputs:
+      version: 
+        description: 'Target Semantic Updated Version'
+        value: ${{ jobs.Semantic_Versioning.outputs.VERSION }}
 
 jobs:
-  Check_Version:
+  Semantic_Versioning:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -33,7 +33,7 @@ jobs:
       version: ${{ needs.semantic-versioning.outputs.version }}
       from: release
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      gh_token: ${{ secrets.GITHUB_TOKEN }}
 
   Deploy:
     needs: 
@@ -45,4 +45,4 @@ jobs:
       environment: production
       runs-on: ubuntu-latest
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      gh_token: ${{ secrets.GITHUB_TOKEN }}

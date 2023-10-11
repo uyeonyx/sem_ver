@@ -10,22 +10,27 @@ jobs:
     uses: ./.github/workflows/sem-ver.yaml
     
   Build:
-    needs:
+    needs: 
       - Semantic-Versioning
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Node App
-        uses: ./.github/workflows/build.yaml
-        with:
-          version: ${{ needs.semantic-versioning.outputs.version }}
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
 
   Test:
     needs: 
       - Semantic-Versioning
       - Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test Node App
-        uses: ./.github/workflows/test.yaml
-        with:
-          version: ${{ needs.semantic-versioning.outputs.version }}
+    uses: ./.github/workflows/test.yaml
+    with:
+        version: ${{ needs.semantic-versioning.outputs.version }}
+
+  Deploy:
+    needs: 
+      - Semantic-Versioning
+      - Build
+      - Test
+    uses: ./.github/workflows/deploy.yaml
+    with:
+        version: ${{ needs.semantic-versioning.outputs.version }}
+        environment: production
+        runs-on: ubuntu-latest

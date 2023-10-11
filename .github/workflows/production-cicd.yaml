@@ -31,7 +31,7 @@ jobs:
     uses: ./.github/workflows/release.yaml
     with:
       version: ${{ needs.semantic-versioning.outputs.version }}
-      from: release
+      from: master
 
   Deploy:
     needs: 

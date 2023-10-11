@@ -2,13 +2,6 @@ name: Semantic Versioning
 
 on:
   workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
-    secrets:
-      token:
-        required: true
 
 jobs:
   Check_Version:

@@ -11,6 +11,10 @@ on:
         description: 'From Branch (merge source)'
         required: true
         type: string
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub Token'
+        required: true
 
 jobs:
   Release:
@@ -45,7 +49,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         with:
           tag_name: v${{ inputs.version }}
           release_name: v${{ inputs.version }}
@@ -55,7 +59,7 @@ jobs:
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build-${{inputs.version}}.zip

@@ -1,0 +1,28 @@
+name: test
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-${{inputs.version}}
+
+      - name: Unzip Build artifact
+        run: |
+          tar -xvf build-${{inputs.version}}.zip
+      
+      - name: Run tests
+        run: |
+          npm install
+          npm run test
+        if: always()

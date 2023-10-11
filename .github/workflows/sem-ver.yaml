@@ -72,8 +72,5 @@ jobs:
           TAG=v$VERSION
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: echo version
-        run: echo v${{ steps.versionup.outputs.VERSION }}
-
     outputs:
       VERSION: v${{ steps.versionup.outputs.VERSION }}

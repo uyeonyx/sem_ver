@@ -4,8 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf ./dist && mkdir dist && cp ./src/index.js ./dist/index.js",
+    "start": "node dist/index.js check-env",
+    "test": "npm run test:success && npm run test:fail",
+    "test:success": "RESULT=$(node dist/index.js) && echo - value: $RESULT && echo - compare: 'Hello, World!' && [ \"$RESULT\" = \"Hello, World!\" ] && echo \"=> success: RESULT is 'Hello, World!'\" || { echo \"=> fail: RESULT is not 'Hello, World!'.\"; echo [exit 1] && exit 1; } &&  echo [exit 0]",
+    "test:fail": "RESULT=$(node dist/index.js) && echo - value: $RESULT && echo - compare: 'Oh, My God.' && [ \"$RESULT\" = \"Oh, My God.\" ] && echo \"=> success: RESULT is 'Oh, My God.\" || { echo \"=> fail: RESULT is not 'Oh, My God.'.\";  echo [exit 1] && exit 1; } && echo [exit 0]"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
 }

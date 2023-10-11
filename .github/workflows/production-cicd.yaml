@@ -6,13 +6,19 @@ on:
       - master
 
 jobs:
-  version:
+  semantic-versioning:
     uses: ./.github/workflows/sem-ver.yaml
     
+  build:
+    needs: semantic-versioning
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
 
-  print:
-    runs-on: ubuntu-latest
-    needs: version
-    steps:
-      - name: Print version
-        run: echo ${{ needs.version.outputs.version }}
+  test:
+    needs: 
+      - semantic-versioning
+      - build
+    uses: ./.github/workflows/test.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}

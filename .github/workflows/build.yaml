@@ -1,0 +1,38 @@
+name: Build and Test 
+
+on: 
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        type: string
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 18.15.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.15.0
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build
+        run: npm run build
+
+      - name: tar dist
+        run: tar -czvf build-${{inputs.version}}.zip dist package.json package-lock.json CHANGELOG.md README.md
+      
+      - name: Archive Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-${{inputs.version}}
+          path: |
+            ./build-${{inputs.version}}.zip

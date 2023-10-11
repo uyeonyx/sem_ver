@@ -26,7 +26,7 @@ jobs:
         run: echo "Current branch is ${{ github.ref }}"
       
       - name: print current branch
-        run: echo ${{ steps.current-branch.outputs.current-branch }}
+        run: echo ${{ steps.current-branch.outputs }}
 
       # develop 브랜치인 경우에만 실행
       - name: Do Something on Develop

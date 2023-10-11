@@ -73,4 +73,4 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
     outputs:
-      VERSION: v${{ steps.versionup.outputs.VERSION }}
+      VERSION: ${{ steps.versionup.outputs.VERSION }}

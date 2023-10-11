@@ -15,10 +15,6 @@ on:
         description: 'Runs on'
         required: true
         type: string
-    secrets:
-      gh_token:
-        description: 'GitHub Token'
-        required: true
 
 jobs:
   Deploy:

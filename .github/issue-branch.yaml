@@ -1,0 +1,40 @@
+defaultBranch: 'develop'
+branchName: '${issue.number}:${issue.title,}'
+gitSafeReplacementChar: '-'
+branches:
+  - label : feature
+    prefix: feature/
+    name: develop
+    prTarget: develop
+    skip: false
+  - label : bug
+    prefix: bugfix/
+    name: develop
+    prTarget: develop
+    skip: false
+  - label : hotfix
+    prefix: hotfix/
+    name: master
+    prTarget: master
+    skip: false
+  - label : 'release: staging'
+    name: develop
+    prTarget: release
+    skipBranch: true
+    skip: false
+  - label : 'release: production'
+    name: release
+    prTarget: master
+    skipBranch: true
+    skip: false
+  - label : '*'
+    skip: true
+
+
+prSkipCI: true
+copyIssueDescriptionToPR: true
+copyIssueLabelsToPR: true
+copyIssueAssigneeToPR: true
+openDraftPR: true
+commentMessage: "✅ Work Branch Created!\n```git checkout ${branchName}```\ncopy this 👆"
+autoCloseIssue: true

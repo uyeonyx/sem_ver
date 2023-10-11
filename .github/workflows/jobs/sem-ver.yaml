@@ -1,0 +1,67 @@
+jobs:
+  Check_Version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get Previous Version
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 0.0.0
+
+      - name: Check Current Branch
+        id: current-branch
+        run: echo "current-branch=${{ github.ref }}" >> $GITHUB_OUTPUT
+
+      - name: Version Up
+        id: versionup
+        run: |
+          CURRENT_BRANCH = ${{ steps.current-branch.outputs.current-branch }}
+          TAG = ${{ steps.previoustag.outputs.tag }} 
+          COMMIT_MESSAGE = ${{ github.event.head_commit.message }}
+          if [ "$CURRENT_BRANCH" = "refs/heads/develop" ]; then
+          VERSION=$(echo $TAG | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          if echo "$TAG" | grep -i "dev"; then 
+          DEV_VERSION=$(echo $TAG | grep -oE 'dev+\.([0-9]+)' | grep -oE '[0-9]+') || true
+          DEV_VERSION=-dev.$(echo "$DEV_VERSION" | awk -F. '{print $1+1}')
+          else
+          DEV_VERSION=-dev.1
+          fi
+          VERSION=$VERSION$DEV_VERSION
+      
+          elif [ "$CURRENT_BRANCH" = 'refs/heads/release' ]; then
+            VERSION=$(echo $TAG | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+            if echo "$TAG" | grep -i "rc"; then 
+            RC_VERSION=$(echo $TAG | grep -oE 'rc+\.([0-9]+\.[0-9]+)' | grep -oE '[0-9]+\.[0-9]+') || true
+            RC_VERSION=-rc.$(echo "$RC_VERSION" | awk -F. '{print $1"."$2+1}')
+            else
+            RC_VERSION=-rc.1.0
+              if echo "$COMMIT_MESSAGE" | grep -i "#major"; then VERSION=$(echo "$VERSION" | awk -F. '{print $1+1".0.0"}') 
+              elif echo "$COMMIT_MESSAGE" | grep -i "#minor"; then VERSION=$(echo "$VERSION" | awk -F. '{print $1"."$2+1".0"}') 
+              elif echo "$COMMIT_MESSAGE" | grep -i "#patch"; then VERSION=$(echo "$VERSION" | awk -F. '{print $1"."$2"."$3+1}')
+              fi
+            fi
+            VERSION=$VERSION$RC_VERSION
+                      
+          elif [ "$CURRENT_BRANCH" = 'refs/heads/master' ]; then
+            VERSION=$(echo $TAG | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          
+            if echo "$COMMIT_MESSAGE" | grep -i "#hotfix"; then
+              if echo "$TAG" | grep -i "hotfix"; then 
+              HOTFIX_VERSION=$(echo $TAG | grep -oE 'hotfix+\.([0-9]+)' | grep -oE '[0-9]+') || true
+              HOTFIX_VERSION=-hotfix.$(echo "$HOTFIX_VERSION" | awk -F. '{print $1+1}')
+              else
+              HOTFIX_VERSION=-hotfix.1
+              fi
+            fi
+            VERSION=$VERSION$HOTFIX_VERSION
+          fi
+          echo "Target Version = v$VERSION"
+          TAG=v$VERSION
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+    outputs:
+      VERSION: v${{ steps.versionup.outputs.VERSION }}

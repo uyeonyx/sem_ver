@@ -22,15 +22,26 @@ jobs:
       - Build
     uses: ./.github/workflows/test.yaml
     with:
-        version: ${{ needs.semantic-versioning.outputs.version }}
+      version: ${{ needs.semantic-versioning.outputs.version }}
+
+  Release:
+    needs:
+      - Semantic-Versioning
+      - Build
+      - Test
+    uses: ./github/workflows/release.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
+      from: release
 
   Deploy:
     needs: 
       - Semantic-Versioning
       - Build
       - Test
+      - Release
     uses: ./.github/workflows/deploy.yaml
     with:
-        version: ${{ needs.semantic-versioning.outputs.version }}
-        environment: production
-        runs-on: ubuntu-latest
+      version: ${{ needs.semantic-versioning.outputs.version }}
+      environment: production
+      runs-on: ubuntu-latest

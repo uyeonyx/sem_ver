@@ -1,0 +1,44 @@
+name: Staging Release
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  Semantic-Versioning:
+    uses: ./.github/workflows/sem-ver.yaml
+    
+  Build:
+    needs: 
+      - Semantic-Versioning
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
+
+  Test:
+    needs: 
+      - Semantic-Versioning
+      - Build
+    uses: ./.github/workflows/test.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
+
+  Release:
+    needs:
+      - Semantic-Versioning
+      - Test
+    uses: ./.github/workflows/release.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
+      from: release
+
+  Deploy:
+    needs: 
+      - Semantic-Versioning
+      - Release
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.semantic-versioning.outputs.version }}
+      environment: staging
+      runs-on: ubuntu-latest

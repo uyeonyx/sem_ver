@@ -1,0 +1,17 @@
+name: Workflow A
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  version:
+    uses: ./.github/workflows/sem-ver.yaml
+
+  print:
+    runs-on: ubuntu-latest
+    needs: version
+    steps:
+      - name: Print version
+        run: echo ${{ needs.version.outputs.VERSION }}

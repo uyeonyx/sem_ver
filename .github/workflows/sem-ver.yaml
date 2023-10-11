@@ -15,7 +15,7 @@ jobs:
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
         with:
-          fallback: 0.0.0
+          fallback: 1.0.0
 
       - name: Check Current Branch
         id: current-branch
@@ -67,6 +67,9 @@ jobs:
           echo "Target Version = v$VERSION"
           TAG=v$VERSION
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: echo version
+        run: echo v${{ steps.versionup.outputs.VERSION }}
 
     outputs:
       VERSION: v${{ steps.versionup.outputs.VERSION }}

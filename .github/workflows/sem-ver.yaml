@@ -28,7 +28,7 @@ jobs:
       - name: Version Up
         id: versionup
         run: |
-          CURRENT_BRANCH='${{ steps.current-branch.outputs.current-branch }}''
+          CURRENT_BRANCH='${{ steps.current-branch.outputs.current-branch }}'
           TAG='${{ steps.previoustag.outputs.tag }}'
           COMMIT_MESSAGE='${{ github.event.head_commit.message }}'
           if [ "$CURRENT_BRANCH" = "refs/heads/develop" ]; then

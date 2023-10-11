@@ -27,7 +27,6 @@ jobs:
   Release:
     needs:
       - Semantic-Versioning
-      - Build
       - Test
     uses: ./github/workflows/release.yaml
     with:
@@ -37,8 +36,6 @@ jobs:
   Deploy:
     needs: 
       - Semantic-Versioning
-      - Build
-      - Test
       - Release
     uses: ./.github/workflows/deploy.yaml
     with:

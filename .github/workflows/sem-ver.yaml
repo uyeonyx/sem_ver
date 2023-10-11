@@ -23,10 +23,10 @@ jobs:
       # 현재 브랜치를 확인하여 작업 분기
       - name: Check Current Branch
         id: current-branch
-        run: echo "Current branch is ${{ github.ref }}"
+        run: echo "current-branch=${{ github.ref }}" >> $GITHUB_OUTPUT
       
       - name: print current branch
-        run: echo ${{ steps.current-branch.outputs }}
+        run: echo ${{ steps.current-branch.outputs.current-branch }}
 
       # develop 브랜치인 경우에만 실행
       - name: Do Something on Develop

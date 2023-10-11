@@ -25,6 +25,9 @@ jobs:
         id: current-branch
         run: echo "Current branch is ${{ github.ref }}"
       
+      - name: print current branch
+        run: echo ${{ steps.current-branch.outputs.current-branch }}
+
       # develop 브랜치인 경우에만 실행
       - name: Do Something on Develop
         if: ${{ steps.current-branch.outputs.current-branch == 'refs/heads/develop' }}

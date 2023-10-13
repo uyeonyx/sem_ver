@@ -27,7 +27,7 @@ jobs:
 
       - name: test
         run: | 
-          echo '${{github.sha}}'
+          echo '$(echo ${{github.sha}} | cut -c1-7)'
           exit 1
 
       - name: Version Up
